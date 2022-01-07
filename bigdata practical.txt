@@ -1,0 +1,81 @@
+MONGODB PRACTICAL
+
+C:\Users\hp>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongod
+
+open another terminal 
+
+C:\Users\hp>cd C:\Program Files\MongoDB\Server\5.0\bin
+
+C:\Program Files\MongoDB\Server\5.0\bin>mongo
+
+1) show dbs
+2)use sampleprod
+db.sampleprod.insertOne({name:'',price:30,color:''});
+3)db.sampleprod.find();
+4)db.sampleprod.find().pretty();
+5)db.sampleprod.insertMany([{name:'',price:50},{name:'',price:100,qty:1}]);
+db.sampleprod.insertOne({name:'',_id:""});
+6)db.sampleprod.updateOne({name:''},{$set:{price:100,qty:10}});
+db.sampleprod.updateMany({name:''},{$set:{ qty:150}});
+db.sampleprod.deleteOne({_id:''});
+
+
+class 2
+
+db.transactions.insert({ cr_dr : "D", amount : 100, fee : 2});
+db.transactions.insert({ cr_dr : "C", amount : 100, fee : 2});
+db.transactions.insert({ cr_dr : "C", amount : 10, fee : 2});
+db.transactions.insert({ cr_dr : "D", amount : 100, fee : 4});
+db.transactions.insert({ cr_dr : "D", amount : 10, fee : 2});
+db.transactions.insert({ cr_dr : "C", amount : 10, fee : 4});
+db.transactions.insert({ cr_dr : "D", amount : 100, fee : 2});
+
+db.employees.insert({"name":"Adma","dept":"Admin","languages":["german","french","english","hindi"]
+,"age":30, "totalExp":10});
+db.employees.insert({"name":"Anna","dept":"Admin","languages":["english","hindi"],"age":35,
+"totalExp":11});
+db.employees.insert({"name":"Bob","dept":"Facilities","languages":["english","hindi"],"age":36,
+"totalExp":14});
+db.employees.insert({"name":"Cathy","dept":"Facilities","languages":["hindi"],"age":31,
+"totalExp":4});
+db.employees.insert({"name":"Mike","dept":"HR","languages":["english", "hindi",
+"spanish"],"age":26, "totalExp":3});
+db.employees.insert({"name":"Jenny","dept":"HR","languages":["english", "hindi",
+"spanish"],"age":25, "totalExp":3});
+
+db.employees.aggregate([{$match:{dept:"Admin"}}]);
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1}}]);
+db.employees.aggregate({$project: {'_id':0, 'name': 1}})
+db.employees.aggregate([{$group:{"_id":"$dept"}}]);
+db.employees.aggregate([{$group:{"_id":null, "totalAge":{$sum:"$age"}}}]);
+db.employees.aggregate([{$group:{"_id":"$dept", "noOfDept":{$sum:1}}}]);
+db.employees.aggregate([{$group:{"_id":"$dept", "noOfEmployee":{$sum:1},
+"avgExp":{$avg:"$totalExp"}}}]);
+
+db.employees.aggregate([{$group:{"_id":"$dept", "noOfEmployee":{$sum:1},
+"minExp":{$min:"$totalExp"}}}]);
+db.employees.aggregate([{$group:{"_id":"$dept", "noOfEmployee":{$sum:1},
+"maxExp":{$max:"$totalExp"}}}]);
+
+db.employees.aggregate([{$match:{"name":"Adma"}}, {$unwind:"$languages"}]);
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1}}, {$sort: {name:
+1}}]);
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1}}, {$sort: {name:
+-1}}]);
+
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1}}, {$sort: {name:
+-1}}, {$skip:1}]);
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1}}, {$sort: {name:
+-1}}, {$limit:1}]);
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1, age: {$gt: ["$age",
+30]}}}]);
+db.employees.aggregate([{$match:{dept:"Admin", age: {$gt:30}}}, {$project:{"name":1, "dept":1}}]);
+
+db.employees.aggregate([{$match:{dept:"Admin"}}, {$project:{"name":1, "dept":1, age: { $and: [ {
+$gt: [ "$age", 30 ] }, { $lt: [ "$age", 36 ] } ] }}}]);
+
+db.employees.aggregate([{$match:{dept:"Admin", $and: [{age: { $gt: 30 }}, {age: {$lt: 36 }} ] }},
+{$project:{"name":1, "dept":1, age: { $and: [ { $gt: [ "$age", 30 ] }, { $lt: [ "$age", 36 ] } ]
+}}}]);
